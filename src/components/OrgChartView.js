@@ -2,11 +2,12 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import OrgChart from "@balkangraph/orgchart.js";
 import Controls from "./Controls";
 import "./OrgChartView.css";
-import html2canvas from 'html2canvas';
+// import html2canvas from 'html2canvas';
 // import jsPDF from 'jspdf';
 
 function OrgChartView({ data, originalData, setDisplayData, setSelectedEmployee, onBackToUpload, headers = [], selectedFields = { nameField: 'First_Name', titleField: 'Designation' }, setSelectedFields, department = '' }) {
   const chartContainerRef = useRef(null);
+  const chartRef = useRef(null);
   const chartInstanceRef = useRef(null);
   const exportRef = useRef(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -324,84 +325,19 @@ function OrgChartView({ data, originalData, setDisplayData, setSelectedEmployee,
       });
     }
   // colorNodes helper is defined at component scope; call it after creation
+  chartRef.current = chart;
 
-  chartInstanceRef.current = chart;
+  // chartInstanceRef.current = chart;
   // color initial nodes (delay to allow internal rendering)
   setTimeout(() => { colorNodes(chart, data); addStatusBadges(chart, data); }, 300);
     return () => chart.destroy();
   }, [data, originalData, setSelectedEmployee, selectedTemplate, effectiveSelected.nameField, effectiveSelected.extras, department, headers, mapRowToNode]);
-  const handleExportImage = async () => {
-    if (!chartContainerRef.current) return;
+  const handleExportImage = () => {
+  if (chartRef.current) {
+    chartRef.current.exportPNG({ filename: "orgchart.png" });
+  }
+};
 
-    // Safely get config nodes
-    const cfgNodes = chartInstanceRef.current && chartInstanceRef.current.config && chartInstanceRef.current.config.nodes ? chartInstanceRef.current.config.nodes : [];
-
-    try {
-      // 1) Preload all unique image URLs referenced by nodes (this covers original URLs)
-      const urls = Array.from(new Set(cfgNodes.map(n => n && n.img).filter(Boolean)));
-      await Promise.all(urls.map(u => new Promise(res => {
-        try {
-          const im = new Image();
-          // request anonymous CORS where possible
-          try { im.crossOrigin = 'anonymous'; } catch(e) {}
-          im.onload = () => res();
-          im.onerror = () => res();
-          im.src = u;
-        } catch (e) { res(); }
-      })));
-
-      // 2) Ensure each rendered node element uses the node image.
-      // Some templates render <img>, others use background-image on a div.
-      cfgNodes.forEach(n => {
-        try {
-          let nodeEl = null;
-          if (chartInstanceRef.current && typeof chartInstanceRef.current.getNodeElement === 'function') nodeEl = chartInstanceRef.current.getNodeElement(n.id);
-          if (!nodeEl && chartContainerRef.current) {
-            nodeEl = chartContainerRef.current.querySelector(`[data-id="${n.id}"]`) || chartContainerRef.current.querySelector(`#${n.id}`) || chartContainerRef.current.querySelector(`[data-n-id="${n.id}"]`);
-          }
-          if (!nodeEl) return;
-
-          // 2a) If template includes an <img>, set its src
-          const imgEl = nodeEl.querySelector && nodeEl.querySelector('img');
-          if (imgEl && n.img) {
-            try { imgEl.crossOrigin = 'anonymous'; } catch(e) {}
-            if (imgEl.src !== n.img) imgEl.src = n.img;
-            return;
-          }
-
-          // 2b) Otherwise set background-image on likely photo containers
-          if (n.img) {
-            const photoCandidate = nodeEl.querySelector && (nodeEl.querySelector('.boc-photo') || nodeEl.querySelector('.photo') || nodeEl.querySelector('.node-photo') || nodeEl.querySelector('.boc-node') || nodeEl);
-            try {
-              if (photoCandidate && photoCandidate.style) {
-                photoCandidate.style.backgroundImage = `url("${n.img}")`;
-                photoCandidate.style.backgroundSize = 'cover';
-                photoCandidate.style.backgroundPosition = 'center center';
-              }
-            } catch(e) { }
-          }
-        } catch (e) { /* non-fatal per-node */ }
-      });
-
-    } catch (e) {
-      // non-fatal; continue to attempt export even if image preloading or DOM updates failed
-    }
-
-    // give browser a short moment to apply image updates
-    await new Promise(res => setTimeout(res, 200));
-
-    // Finally render to canvas and download
-    const canvas = await html2canvas(chartContainerRef.current, {
-      scale: 2,
-      backgroundColor: '#ffffff',
-      useCORS: true,
-    });
-    const imgData = canvas.toDataURL('image/png');
-    const link = document.createElement('a');
-    link.href = imgData;
-    link.download = 'orgchart.png';
-    link.click();
-  };
 
   // note: selectedTemplate is included in the effect deps so changing it will recreate the chart
   const handleRefresh = () => {
