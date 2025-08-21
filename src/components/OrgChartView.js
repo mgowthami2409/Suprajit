@@ -275,7 +275,12 @@ function OrgChartView({ data, originalData, setDisplayData, setSelectedEmployee,
     OrgChart.templates.isla.link = '<path stroke-linejoin="round" stroke="#1e4489" stroke-width="2px" fill="none" d="{rounded}" />'; 
 
   const chart = new OrgChart(chartContainerRef.current, {
-      nodes,
+      nodes: data.map(node => ({
+      ...node,
+      background: colorNodes(node.Department), // ✅ use colorNodes here
+      name: node.First_Name,
+      title: node.Designation,
+    })),
       nodeBinding: {
         field_0: "name",
         field_1: "title",
@@ -337,7 +342,6 @@ function OrgChartView({ data, originalData, setDisplayData, setSelectedEmployee,
     chartRef.current.exportPNG({ filename: "orgchart.png" });
   }
 };
-
 
   // note: selectedTemplate is included in the effect deps so changing it will recreate the chart
   const handleRefresh = () => {
