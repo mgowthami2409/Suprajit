@@ -1,0 +1,456 @@
+/* =============================
+   Global Styles
+============================= */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  background: #3fabe0;
+  color: #0b0b0b;
+  text-align: center;
+  overflow-x: hidden;
+  transition: background 0.5s ease;
+}
+
+/* Add watermark */
+body::before {
+  content: "";
+  position: fixed;
+  top: 50%; left: 50%;
+  width: 600px; height: 600px;
+  background-image: url('./assets/logo-removebg-preview.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  opacity: 0.06;
+  transform: translate(-50%, -50%) scale(1);
+  z-index: 0;
+  pointer-events: none;
+  animation: slow-fade 6s ease-in-out infinite alternate;
+}
+
+@keyframes slow-fade {
+  from {
+    opacity: 0.04;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    opacity: 0.07;
+    transform: translate(-50%, -50%) scale(1.05);
+  }
+}
+
+/* =============================
+   Header styles
+============================= */
+.header-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  padding: 20px 0;
+  animation: slide-down 0.6s ease;
+}
+
+.header-container .logo-img {
+  max-height: 50px;
+  width: auto;
+}
+
+/* Animations */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-down {
+  from {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* =============================
+   Upload Section
+============================= */
+.upload-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: fade-in 0.8s ease;
+}
+
+.upload-container p {
+  font-size: 1em;
+  margin-bottom: 20px;
+}
+
+input[type="file"] {
+  display: none;
+}
+
+/* Loading label & buttons */
+.custom-file-upload, .styled-button {
+  padding: 8px 16px;
+  font-size: 1em;
+  font-weight: bold;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  transition: all 0.3s ease, transform 0.2s ease;
+}
+
+.custom-file-upload:hover,
+.styled-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.2);
+}
+
+/* =============================
+   Chart Section
+============================= */
+#chart_div {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  background: linear-gradient(145deg, #eaecd1, #bedce6);
+  overflow: hidden;
+  z-index: 1;
+  animation: fade-in 0.8s ease;
+}
+
+#orgChart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: zoom-in 0.6s ease;
+  width: 100%;
+  height: 90vh;
+}
+
+@keyframes zoom-in {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* =============================
+   Search Controls
+============================= */
+.search-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.search-controls input {
+  padding: 6px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  width: 200px;
+  font-size: 14px;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.search-controls input:focus {
+  outline: none;
+  box-shadow: 0 0 8px rgba(79,140,254,0.6);
+  transform: scale(1.03);
+}
+
+/* =============================
+   Popup
+============================= */
+.popup {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  animation: popin 0.3s forwards;
+}
+
+@keyframes popin {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.popup-content {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  width: 300px;
+  text-align: left;
+  position: relative;
+  box-shadow: 0 10px 22px rgba(0,0,0,0.25);
+  transform: translateY(-30px);
+  animation: drop-in 0.4s ease forwards;
+}
+
+@keyframes drop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.popup-content h3 {
+  margin-top: 0;
+}
+
+.popup-field {
+  margin: 10px 0;
+  font-size: 0.95em;
+}
+
+.popup-field strong {
+  display: inline-block;
+  width: 110px;
+  text-align: left;
+}
+
+.close {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 24px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.close:hover {
+  color: red;
+}
+
+/* Photo upload button (top-right of popup) */
+.photo-plus {
+  position: absolute;
+  top: 10px;
+  right: 44px; /* leave space for close 'x' */
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(180deg, #4caf50, #388e3c);
+  color: #fff;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1010;
+}
+.photo-plus:hover { transform: scale(1.05); }
+
+/* Employee photo inside popup */
+.emp-photo {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  display: block;
+}
+
+.emp-photo-placeholder {
+  width: 90px;
+  height: 90px;
+  border-radius: 8px;
+  border: 1px dashed #bbb;
+  display: flex;
+  margin: auto;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  background: #fafafa;
+  font-size: 34px;
+}
+
+/* =============================
+   Print Style Overrides
+============================= */
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 5mm;
+  }
+
+  body {
+    background: white !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body::before {
+    display: none !important;
+  }
+
+  .header-container,
+  #page-title,
+  .upload-container,
+  .search-controls,
+  .popup {
+    display: none !important;
+  }
+
+  #chart_div {
+    position: relative !important;
+    background: #fff !important;
+    margin-top: 80px !important;
+    height: auto !important;
+  }
+}
+
+.app-container {
+  text-align: center;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 3px;
+}
+
+.header .logo {
+  height: 50px;
+  margin-right: 10px;
+}
+
+.header h1 {
+  font-size: 35px;
+  font-weight: bold;
+  color: #1e4489;
+  text-shadow: 2px 2px 4px #000000;
+}
+
+.sub-header {
+  font-size: 28px;
+  font-weight: bold;
+  color: #bd2331;
+  margin-bottom: 20px;
+}
+
+.template-download {
+  margin-bottom: 20px;
+}
+
+.template-download p {
+  font-size: 16px;
+  margin-bottom: 8px;
+  color: #000;
+}
+
+.download-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #8fc63d;
+  color: white;
+  font-weight: bold;
+  border-radius: 6px;
+  text-decoration: none;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.2s ease;
+}
+
+.download-btn:hover {
+  background-color: #45a049;
+}
+
+.upload-section {
+  margin-top: 20px;
+}
+
+.upload-section input[type="file"] {
+  margin-bottom: 10px;
+}
+
+.upload-section button {
+  margin: 5px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  background: #606060;
+  color: white;
+}
+
+.upload-section button:hover {
+  background: #c1b9b9;
+}
+
+.upload-section button:first-of-type {
+  background-color: #5a2e9d;
+  color: white;
+}
+
+.upload-section button:first-of-type:hover {
+  background-color: rgb(6, 65, 123);
+}
+
+.upload-section button:last-of-type {
+  background-color: #bd2331;
+  color: white;
+}
+
+.upload-section button:last-of-type:hover {
+  background-color: #f20e21;
+}
+
+.file-name {
+  margin-top: 8px;
+  display: inline-block;
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+}
+
+.file-name.error {
+  color: red;
+  font-weight: bold;
+}
+
+.file-name.success {
+  color: green;
+  font-weight: bold;
+}

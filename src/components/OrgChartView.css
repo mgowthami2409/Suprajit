@@ -1,0 +1,275 @@
+/* OrgChartView.css */
+.orgchart-view {
+  /* background: white; */
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.orgchart-view .header {
+  background: linear-gradient(to right, #dfe9f3, #ffffff);
+  text-align: center;
+  padding: 6px;             
+  font-size: 16px;          
+  font-weight: bold;
+  color: #b30059;
+  letter-spacing: 0.5px;
+}
+
+/* Controls bar */
+.orgchart-view .top-bar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* margin: ;                  no extra margin */
+  padding: 4px 0;             /* minimal padding */
+  gap: 4px;                   /* very small gap */
+  height: auto;               /* shrink naturally */
+  margin-bottom: 2px;
+}
+
+.template-controls {
+  display: flex;
+  gap: 6px;
+  margin-right: 8px;
+}
+.template-btn {
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: none;
+  background: #6aa6d6;
+  color: white;
+  font-size: 12px;
+  cursor: pointer;
+}
+.template-btn.active {
+  background: #1a75b7;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.orgchart-view .top-bar input {
+  padding: 3px 6px;           /* compact input */
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  outline: none;
+  width: 160px;               /* reduced width */
+  font-size: 12px;
+}
+
+.orgchart-view .top-bar button {
+  padding: 3px 8px;           /* smaller buttons */
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;            /* smaller font */
+  color: white;
+  cursor: pointer;
+  font-weight: 500;
+  line-height: 1.1;
+  min-width: 55px;            /* consistent small width */
+}
+
+.orgchart-view .top-bar .refresh {
+  background-color: #4caf50;
+}
+
+.orgchart-view .top-bar .back {
+  background-color: #ff4d4d;
+}
+
+.orgchart-view .top-bar .print {
+  background-color: #0099ff;
+}
+
+.orgchart-view .top-bar .export-img {
+  background-color: #ff9800;
+}
+
+/* Chart */
+.orgchart-view .chart-container {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  background: white;
+}
+
+/* Name text inside node */
+.orgchart .node .field_0 {
+  font-size: 26px !important;   /* increased font size */
+  font-weight: 700 !important;  /* bolder */
+  fill: #ffffff !important;     /* white text */
+  color: #ffffff !important;
+  /* allow wrapping and keep text within node bounds */
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  max-width: 90% !important;
+  text-align: center !important;
+}
+
+/* Title text inside node */
+.orgchart .node .field_1 {
+  font-size: 20px !important;   /* increased font size */
+  font-weight: 600 !important;
+  fill: #ffffff !important;     /* white text */
+  color: #ffffff !important;
+  white-space: normal !important;
+  word-wrap: break-word !important;
+  max-width: 90% !important;
+  text-align: center !important;
+}
+
+/* ================= PRINT STYLES ================= */
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 5mm;
+    border: 2px solid black;
+  }
+
+  body, html {
+    margin: 0 !important;
+    margin-top: 10px !important;
+    padding: 0 !important;
+    border: none !important;
+    background: white !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Show print header */
+  .print-header {
+    display: flex !important;
+    align-items: left;
+    justify-content: left;
+    gap: 10px;
+    margin-top: 15px !important;
+    margin-left: 35px !important;
+  }
+
+  .print-header img {
+    height: 35px;
+    width: auto;
+  }
+
+  .print-header h1 {
+    font-size: 20px;
+    font-weight: bold;
+    color: #1e4489 !important;
+    font-family: 'Aptos', Calibri, sans-serif;
+    margin-top: 5px;
+  }
+  
+  .print-header .print-department {
+    margin: auto !important;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: 'Aptos', Calibri, sans-serif;
+    color: #1e4489 !important;
+  }
+
+  /* Hide unwanted UI */
+  .orgchart-view .header,
+  .orgchart-view .top-bar,
+  .controls,
+  .popup,
+  .upload-container {
+    display: none !important;
+  }
+
+  /* Also hide the field selectors UI in print */
+  .field-selectors {
+    display: none !important;
+  }
+
+  /* Keep chart clean */
+  .orgchart-container {
+    /* margin-top: 10px !important; */
+    background: #fff !important;
+    padding: 0 !important;
+    height: auto !important;
+  }
+
+  #orgChart {
+    display: flex !important;
+    justify-content: center !important;
+    text-align: center !important;
+    margin: 0 auto !important;
+  }
+
+  svg {
+    shape-rendering: crispEdges; /* Prevent blur in print */
+  }
+}
+
+/* Small status badge placed in node top-right */
+.orgchart .node .status-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  box-shadow: 0 0 3px rgba(0,0,0,0.35);
+  border: 2px solid rgba(255,255,255,0.9); /* keep visible on colored backgrounds */
+  z-index: 9999;
+  pointer-events: none; /* ignore clicks */
+}
+
+/* Stronger, template-agnostic overrides so some templates' blue/grey text becomes white */
+.orgchart .node,
+.orgchart .node *,
+.orgchart .node .boc-node,
+.orgchart .node .boc-node-content,
+.orgchart .node .boc-node-inner,
+.orgchart .node .node,
+.orgchart .node .chart-node {
+  color: #ffffff !important;
+}
+
+/* SVG text (templates that render text as <text> or <tspan>) */
+.orgchart .node text,
+.orgchart .node tspan {
+  fill: #ffffff !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Fallback for any inline-styled spans/links inside nodes */
+.orgchart .node span,
+.orgchart .node a,
+.orgchart .node div {
+  color: #ffffff !important;
+}
+
+/* Extra aggressive overrides for templates that render SVG text or use foreignObject */
+/* Target the chart container id (common) and common template wrappers to ensure coverage */
+#orgChart text,
+#orgChart tspan,
+#orgChart svg text,
+#orgChart svg tspan,
+.orgchart svg text,
+.orgchart svg tspan,
+.boc-node text,
+.boc-node tspan,
+.boc-node *,
+.orgchart .node foreignObject *,
+.orgchart .node foreignObject body,
+.orgchart .node foreignObject div {
+  fill: #ffffff !important;
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+/* Sometimes templates use <g> wrappers with inline styles; force color on descendants too */
+.orgchart .node g,
+.orgchart .node g * {
+  fill: #ffffff !important;
+  color: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
