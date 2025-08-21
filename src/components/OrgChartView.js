@@ -39,7 +39,8 @@ function OrgChartView({ data, originalData, setDisplayData, setSelectedEmployee,
       pid: row["Parent ID"] || null,
       name: row[nameKey] || '',
       title: extraParts.join(' - '),
-      img: row.Photo
+      img: row.Photo,
+      status: row.Status || row.status || ''
     };
   }, [effectiveSelected.nameField, effectiveSelected.extras]);
 
@@ -47,12 +48,12 @@ function OrgChartView({ data, originalData, setDisplayData, setSelectedEmployee,
   const colorNodes = (chartObj, rows) => {
     if (!chartObj || !rows || !Array.isArray(rows)) return;
     const getColorForStatus = (status) => {
-      if (!status) return null;
+      if (!status) return "e0e0e0";
       const s = String(status).toLowerCase();
       if (s.includes("active")) return "#1e4489"; 
       if (s.includes("notice")) return "#bd2331"; 
       if (s.includes("vacant") || s.includes("vacency")) return "#ef6724"; 
-      return null; // leave default
+      return "#e0e0e0"; // leave default
     };
     try {
       for (const r of rows) {
@@ -168,7 +169,7 @@ function OrgChartView({ data, originalData, setDisplayData, setSelectedEmployee,
     }
 
   if (!data || data.length === 0 || !chartContainerRef.current) return;
-  // const nodes = data.map(row => mapRowToNode(row));
+  const nodes = data.map(row => mapRowToNode(row));
 
     // Ana Style
   OrgChart.templates.dynamic = Object.assign({}, OrgChart.templates.ana);
@@ -275,12 +276,7 @@ function OrgChartView({ data, originalData, setDisplayData, setSelectedEmployee,
     OrgChart.templates.isla.link = '<path stroke-linejoin="round" stroke="#1e4489" stroke-width="2px" fill="none" d="{rounded}" />'; 
 
   const chart = new OrgChart(chartContainerRef.current, {
-      nodes: data.map(node => ({
-      ...node,
-      background: colorNodes(node.Department), // ✅ use colorNodes here
-      name: node.First_Name,
-      title: node.Designation,
-    })),
+      nodes,
       nodeBinding: {
         field_0: "name",
         field_1: "title",
