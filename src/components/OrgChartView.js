@@ -168,7 +168,7 @@ function OrgChartView({ data, originalData, setDisplayData, setSelectedEmployee,
     }
 
   if (!data || data.length === 0 || !chartContainerRef.current) return;
-  const nodes = data.map(row => mapRowToNode(row));
+  // const nodes = data.map(row => mapRowToNode(row));
 
     // Ana Style
   OrgChart.templates.dynamic = Object.assign({}, OrgChart.templates.ana);
